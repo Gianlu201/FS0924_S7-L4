@@ -76,7 +76,7 @@ function loadList() {
     myH5.classList.add('card-title');
 
     const myTitleLink = document.createElement('a');
-    myTitleLink.href = 'javascript:void(0);';
+    myTitleLink.href = `pexels-details.html?photoId=${element.id}`;
     myTitleLink.innerText = 'Lorem Ipsum';
 
     const myPText = document.createElement('p');
@@ -141,6 +141,15 @@ function showInModal(myId) {
       myImg.alt = element.alt;
       modalBody.appendChild(myImg);
       return;
+    }
+  });
+}
+
+function goToDetails(myId) {
+  myList.forEach((element) => {
+    if (element.id == myId) {
+      localStorage.setItem('image', JSON.stringify(element));
+      window.location('pexels-details.html');
     }
   });
 }
