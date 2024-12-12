@@ -144,12 +144,3 @@ function showInModal(myId) {
     }
   });
 }
-
-function goToDetails(myId) {
-  myList.forEach((element) => {
-    if (element.id == myId) {
-      localStorage.setItem('image', JSON.stringify(element));
-      window.location('pexels-details.html');
-    }
-  });
-}
