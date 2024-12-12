@@ -52,3 +52,7 @@ footer p {
     font-size: 3.5rem;
   }
 }
+
+#modalBody img {
+  max-width: 100%;
+}

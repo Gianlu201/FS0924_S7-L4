@@ -1,11 +1,16 @@
 const btnLoadImages1 = document.getElementById('loadImages');
 const btnLoadImages2 = document.getElementById('loadImages2');
+const btnSendReserch = document.getElementById('sendReserch');
 const imagesBox = document.getElementById('imagesBox');
+const modalBody = document.getElementById('modalBody');
+const myForm = document.getElementById('myForm');
+const searchTheme = document.getElementById('searchTheme');
 
 const searchUrl = 'https://api.pexels.com/v1/search?query=';
 const idUrl = 'https://api.pexels.com/v1/photos/:';
 const myKey = 'z0duCBugPsh1dOb8NR23CJbcYQUkyBmmOrmi0tOKzDc0z61aSLHeURAY';
-const themes = ['ocean', 'tigers', 'red', 'blue'];
+const themes = ['ocean', 'tigers', 'red', 'blue', 'gym'];
+let lastTheme = '';
 let myList = [];
 
 btnLoadImages1.addEventListener('click', (e) => {
@@ -13,9 +18,25 @@ btnLoadImages1.addEventListener('click', (e) => {
   getImages(getTheme());
 });
 
+btnLoadImages2.addEventListener('click', (e) => {
+  e.preventDefault();
+  getImages(getTheme());
+});
+
+btnSendReserch.addEventListener('click', (e) => {
+  e.preventDefault();
+  getImages(searchTheme.value);
+  myForm.reset();
+});
+
 function getTheme() {
   let index = Math.floor(Math.random() * themes.length);
-  return themes[index];
+  if (themes[index] == lastTheme) {
+    getTheme();
+  } else {
+    lastTheme = themes[index];
+    return themes[index];
+  }
 }
 
 const getImages = async (theme) => {
@@ -77,11 +98,15 @@ function loadList() {
     myBtnView.setAttribute('type', 'button');
     myBtnView.classList.add('btn', 'btn-sm', 'btn-outline-secondary');
     myBtnView.innerText = 'View';
+    myBtnView.setAttribute('data-bs-toggle', 'modal');
+    myBtnView.setAttribute('data-bs-target', '#myModal');
+    myBtnView.setAttribute('onclick', `showInModal(${element.id})`);
 
     const myBtnHide = document.createElement('button');
     myBtnHide.setAttribute('type', 'button');
     myBtnHide.classList.add('btn', 'btn-sm', 'btn-outline-secondary');
     myBtnHide.innerText = 'Hide';
+    myBtnHide.setAttribute('onclick', `hideCard(${element.id})`);
 
     const myIdContainer = document.createElement('small');
     myIdContainer.classList.add('text-muted');
@@ -99,5 +124,23 @@ function loadList() {
     myBody.appendChild(myDiv);
     myCol.appendChild(myCard);
     imagesBox.appendChild(myCol);
+  });
+}
+
+function hideCard(id) {
+  document.getElementById(id).setAttribute('hidden', 'true');
+}
+
+function showInModal(myId) {
+  console.log(myList);
+  modalBody.innerHTML = '';
+  myList.forEach((element) => {
+    if (element.id == myId) {
+      const myImg = document.createElement('img');
+      myImg.src = element.src.medium;
+      myImg.alt = element.alt;
+      modalBody.appendChild(myImg);
+      return;
+    }
   });
 }
